@@ -1,7 +1,7 @@
 # AWS Auth Elasticsearch-PHP Handler
 
 [![Apache 2 License](https://img.shields.io/packagist/l/jsq/amazon-es-php.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
-[![Total Downloads](https://img.shields.io/packagist/dt/jsq/amazon-es-php.svg?style=flat)](https://packagist.org/packages/jsq/iron-php)
+[![Total Downloads](https://img.shields.io/packagist/dt/jsq/amazon-es-php.svg?style=flat)](https://packagist.org/packages/jsq/amazon-es-php)
 [![Author](http://img.shields.io/badge/author-@jreskew-blue.svg?style=flat-square)](https://twitter.com/jreskew)
 
 This package provides a signing handler for use with the official
