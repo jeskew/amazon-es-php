@@ -1,7 +1,7 @@
 {
     "name": "jsq/amazon-es-php",
     "description": "Support for using IAM authentication with the official Elasticsearch PHP client",
-    "keywords": ["elasticsearch", "aws", "search", "client"],
+    "keywords": ["elasticsearch", "aws", "search", "client", "iam"],
     "minimum-stability": "stable",
     "license": "Apache-2.0",
     "authors": [
