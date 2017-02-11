@@ -3,6 +3,7 @@
 [![Apache 2 License](https://img.shields.io/packagist/l/jsq/amazon-es-php.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Total Downloads](https://img.shields.io/packagist/dt/jsq/amazon-es-php.svg?style=flat)](https://packagist.org/packages/jsq/amazon-es-php)
 [![Author](http://img.shields.io/badge/author-@jreskew-blue.svg?style=flat-square)](https://twitter.com/jreskew)
+[![Build Status](https://travis-ci.org/jeskew/amazon-es-php.svg?branch=master)](https://travis-ci.org/jeskew/amazon-es-php)
 
 This package provides a signing handler for use with the official
 Elasticsearch-PHP (`elasticsearch/elasticsearch`) client. By default, the
