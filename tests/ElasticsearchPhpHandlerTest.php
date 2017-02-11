@@ -7,22 +7,22 @@ use GuzzleHttp\Ring\Future\CompletedFutureArray;
 
 class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSignsRequestsPassedToHandler()
+    public function testSignsRequestsTheSdkDefaultCredentialProviderChain()
     {
-        $toWrap = function (array $ringRequest) {
+        $key = 'foo';
+        $toWrap = function (array $ringRequest) use ($key) {
             $this->assertArrayHasKey('X-Amz-Date', $ringRequest['headers']);
             $this->assertArrayHasKey('Authorization', $ringRequest['headers']);
             $this->assertStringStartsWith(
-                'AWS4-HMAC-SHA256 Credential=',
+                "AWS4-HMAC-SHA256 Credential=$key/",
                 $ringRequest['headers']['Authorization'][0]
             );
             
             return $this->getGenericResponse();
         };
-        $provider = CredentialProvider::fromCredentials(
-            new Credentials('foo', 'bar', 'baz')
-        );
-        $handler = new ElasticsearchPhpHandler('us-west-2', $provider, $toWrap);
+        putenv(CredentialProvider::ENV_KEY . "=$key");
+        putenv(CredentialProvider::ENV_SECRET . '=bar');
+        $handler = new ElasticsearchPhpHandler('us-west-2', null, $toWrap);
         
         $client = \Elasticsearch\ClientBuilder::create()
             ->setHandler($handler)
