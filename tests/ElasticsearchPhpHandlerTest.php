@@ -3,6 +3,7 @@ namespace Aws\ElasticsearchService;
 
 use Aws\Credentials\CredentialProvider;
 use Aws\Credentials\Credentials;
+use Elasticsearch\ClientBuilder;
 use GuzzleHttp\Ring\Future\CompletedFutureArray;
 
 class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
@@ -13,8 +14,8 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
         $toWrap = function (array $ringRequest) use ($key) {
             $this->assertArrayHasKey('X-Amz-Date', $ringRequest['headers']);
             $this->assertArrayHasKey('Authorization', $ringRequest['headers']);
-            $this->assertStringStartsWith(
-                "AWS4-HMAC-SHA256 Credential=$key/",
+            $this->assertRegExp(
+                "~^AWS4-HMAC-SHA256 Credential=$key/\\d{8}/us-west-2/es/aws4_request~",
                 $ringRequest['headers']['Authorization'][0]
             );
             
@@ -22,11 +23,9 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
         };
         putenv(CredentialProvider::ENV_KEY . "=$key");
         putenv(CredentialProvider::ENV_SECRET . '=bar');
-        $handler = new ElasticsearchPhpHandler('us-west-2', null, $toWrap);
-        
-        $client = \Elasticsearch\ClientBuilder::create()
-            ->setHandler($handler)
-            ->build();
+        $client = $this->getElasticsearchClient(
+            new ElasticsearchPhpHandler('us-west-2', null, $toWrap)
+        );
         
         $client->get([
             'index' => 'index',
@@ -50,18 +49,28 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
 
             return $this->getGenericResponse();
         };
-        
-        $handler = new ElasticsearchPhpHandler('us-west-2', $provider, $toWrap);
 
-        $client = \Elasticsearch\ClientBuilder::create()
-            ->setHandler($handler)
-            ->build();
+        $client = $this->getElasticsearchClient(
+            new ElasticsearchPhpHandler('us-west-2', $provider, $toWrap)
+        );
         
         $client->get([
             'index' => 'index',
             'type' => 'type',
             'id' => 'id',
         ]);
+    }
+
+    private function getElasticsearchClient(ElasticsearchPhpHandler $handler)
+    {
+        $builder = ClientBuilder::create()
+            ->setHandler($handler);
+
+        if (method_exists($builder, 'allowBadJSONSerialization')) {
+            $builder = $builder->allowBadJSONSerialization();
+        }
+
+        return $builder->build();
     }
     
     private function getGenericResponse()
