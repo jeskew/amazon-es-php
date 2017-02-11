@@ -4,7 +4,6 @@ namespace Aws\ElasticsearchService;
 use Aws\Credentials\CredentialProvider;
 use Aws\Signature\SignatureV4;
 use Elasticsearch\ClientBuilder;
-use GuzzleHttp\Promise;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
