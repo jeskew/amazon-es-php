@@ -19,7 +19,10 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
             
             return $this->getGenericResponse();
         };
-        $handler = new ElasticsearchPhpHandler('us-west-2', null, $toWrap);
+        $provider = CredentialProvider::fromCredentials(
+            new Credentials('foo', 'bar', 'baz')
+        );
+        $handler = new ElasticsearchPhpHandler('us-west-2', $provider, $toWrap);
         
         $client = \Elasticsearch\ClientBuilder::create()
             ->setHandler($handler)
