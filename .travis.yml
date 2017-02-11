@@ -14,7 +14,11 @@ env:
   - COMPOSER_OPTS="--prefer-lowest"
 
 matrix:
+  allow_failures:
+    - php: hhvm
   fast_finish: true
 
 install:
   - travis_retry composer update $COMPOSER_OPTS --no-interaction --prefer-source
+
+script: vendor/bin/phpunit --coverage-text
