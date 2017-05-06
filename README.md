@@ -90,3 +90,11 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
     ...
 }
 ```
+
+## Installation
+
+### Composer
+
+```
+composer require jsq/amazon-es-php
+```
