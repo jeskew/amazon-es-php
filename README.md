@@ -24,7 +24,7 @@ $handler = new ElasticsearchPhpHandler('us-west-2');
 
 // Use this handler to create an Elasticsearch-PHP client
 $client = ClientBuilder::create()
-    ->setHandler(new ElasticsearchPhpHandler('us-west-2'))
+    ->setHandler($handler)
     ->setHosts(['https://search-foo-3gn4utxfus5cqpn89go4z5lbsm.us-west-2.es.amazonaws.com:443'])
     ->build();
 
@@ -89,4 +89,12 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
     }
     ...
 }
+```
+
+## Installation
+
+### Composer
+
+```
+composer require jsq/amazon-es-php
 ```
