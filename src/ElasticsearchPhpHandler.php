@@ -55,7 +55,7 @@ class ElasticsearchPhpHandler
     {
         // fix for uppercase 'Host' array key in elasticsearch-php 5.3.1 and backward compatible
         // https://github.com/aws/aws-sdk-php/issues/1225
-        $hostKey = array_key_exists('Host', $ringPhpRequest['headers'])? 'Host' : 'host';
+        $hostKey = isset($ringPhpRequest['headers']['Host'])? 'Host' : 'host';
 
         // Amazon ES listens on standard ports (443 for HTTPS, 80 for HTTP).
         // Consequently, the port should be stripped from the host header.
