@@ -32,7 +32,7 @@ class ElasticsearchPhpHandler
         callable $wrappedHandler = null
     ) {
         $this->signer = new SignatureV4('es', $region);
-        $this->wrappedHandler = $wrappedHandler 
+        $this->wrappedHandler = $wrappedHandler
             ?: ClientBuilder::defaultHandler();
         $this->credentialProvider = $credentialProvider
             ?: CredentialProvider::defaultProvider();
@@ -44,7 +44,7 @@ class ElasticsearchPhpHandler
         $psr7Request = $this->createPsr7Request($request);
         $signedRequest = $this->signer
             ->signRequest($psr7Request, $creds);
-        
+
         return call_user_func($this->wrappedHandler, array_replace(
             $request,
             $this->createRingRequest($signedRequest)
@@ -53,15 +53,19 @@ class ElasticsearchPhpHandler
 
     private function createPsr7Request(array $ringPhpRequest)
     {
+        // fix for uppercase 'Host' array key in elasticsearch-php 5.3.1 and backward compatible
+        // https://github.com/aws/aws-sdk-php/issues/1225
+        $hostKey = isset($ringPhpRequest['headers']['Host'])? 'Host' : 'host';
+
         // Amazon ES listens on standard ports (443 for HTTPS, 80 for HTTP).
         // Consequently, the port should be stripped from the host header.
-        $ringPhpRequest['headers']['host'][0]
-            = parse_url($ringPhpRequest['headers']['host'][0])['host'];
+        $ringPhpRequest['headers'][$hostKey][0]
+            = parse_url($ringPhpRequest['headers'][$hostKey][0])['host'];
 
         // Create a PSR-7 URI from the array passed to the handler
         $uri = (new Uri($ringPhpRequest['uri']))
             ->withScheme($ringPhpRequest['scheme'])
-            ->withHost($ringPhpRequest['headers']['host'][0]);
+            ->withHost($ringPhpRequest['headers'][$hostKey][0]);
         if (isset($ringPhpRequest['query_string'])) {
             $uri = $uri->withQuery($ringPhpRequest['query_string']);
         }
@@ -74,7 +78,7 @@ class ElasticsearchPhpHandler
             $ringPhpRequest['body']
         );
     }
-    
+
     private function createRingRequest(RequestInterface $request)
     {
         $uri = $request->getUri();
