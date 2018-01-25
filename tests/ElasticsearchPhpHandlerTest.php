@@ -61,6 +61,41 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    public function testEmptyRequestBodiesShouldBeNull()
+    {
+        $toWrap = function (array $ringRequest) {
+            $this->assertNull($ringRequest['body']);
+
+            return $this->getGenericResponse();
+        };
+
+        $client = $this->getElasticsearchClient(
+            new ElasticsearchPhpHandler('us-west-2', null, $toWrap)
+        );
+
+        $client->indices()->exists(['index' => 'index']);
+    }
+
+    public function testNonEmptyRequestBodiesShouldNotBeNull()
+    {
+        $toWrap = function (array $ringRequest) {
+            $this->assertNotNull($ringRequest['body']);
+
+            return $this->getGenericResponse();
+        };
+
+        $client = $this->getElasticsearchClient(
+            new ElasticsearchPhpHandler('us-west-2', null, $toWrap)
+        );
+
+        $client->search([
+            'index' => 'index',
+            'body' => [
+                'query' => [ 'match_all' => (object)[] ],
+            ],
+        ]);
+    }
+
     private function getElasticsearchClient(ElasticsearchPhpHandler $handler)
     {
         $builder = ClientBuilder::create()
