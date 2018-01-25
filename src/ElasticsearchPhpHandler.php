@@ -82,11 +82,19 @@ class ElasticsearchPhpHandler
     private function createRingRequest(RequestInterface $request)
     {
         $uri = $request->getUri();
+        $body = (string) $request->getBody();
+
+        // RingPHP currently expects empty message bodies to be null:
+        // https://github.com/guzzle/RingPHP/blob/4c8fe4c48a0fb7cc5e41ef529e43fecd6da4d539/src/Client/CurlFactory.php#L202
+        if (empty($body)) {
+            $body = null;
+        }
+
         $ringRequest = [
             'http_method' => $request->getMethod(),
             'scheme' => $uri->getScheme(),
             'uri' => $uri->getPath(),
-            'body' => (string) $request->getBody(),
+            'body' => $body,
             'headers' => $request->getHeaders(),
         ];
         if ($uri->getQuery()) {
