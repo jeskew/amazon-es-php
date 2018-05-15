@@ -45,10 +45,7 @@ class ElasticsearchPhpHandler
         $signedRequest = $this->signer
             ->signRequest($psr7Request, $creds);
 
-        return call_user_func($this->wrappedHandler, array_replace(
-            $request,
-            $this->createRingRequest($signedRequest)
-        ));
+        return call_user_func($this->wrappedHandler, $this->createRingRequest($signedRequest));
     }
 
     private function createPsr7Request(array $ringPhpRequest)
@@ -61,6 +58,8 @@ class ElasticsearchPhpHandler
         // Consequently, the port should be stripped from the host header.
         $ringPhpRequest['headers'][$hostKey][0]
             = parse_url($ringPhpRequest['headers'][$hostKey][0])['host'];
+
+        $ringPhpRequest['headers']['Content-Type'] = 'application/json';
 
         // Create a PSR-7 URI from the array passed to the handler
         $uri = (new Uri($ringPhpRequest['uri']))
