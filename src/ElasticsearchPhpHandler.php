@@ -45,10 +45,7 @@ class ElasticsearchPhpHandler
         $signedRequest = $this->signer
             ->signRequest($psr7Request, $creds);
 
-        return call_user_func($this->wrappedHandler, array_replace(
-            $request,
-            $this->createRingRequest($signedRequest)
-        ));
+        return call_user_func($this->wrappedHandler, $this->createRingRequest($signedRequest));
     }
 
     private function createPsr7Request(array $ringPhpRequest)
