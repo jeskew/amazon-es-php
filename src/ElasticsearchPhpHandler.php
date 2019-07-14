@@ -56,8 +56,10 @@ class ElasticsearchPhpHandler
 
         // Amazon ES listens on standard ports (443 for HTTPS, 80 for HTTP).
         // Consequently, the port should be stripped from the host header.
-        $ringPhpRequest['headers'][$hostKey][0]
-            = parse_url($ringPhpRequest['headers'][$hostKey][0])['host'];
+        $parsedHost = parse_url($ringPhpRequest['headers'][$hostKey][0]);
+        if (isset($parsedHost['host'])) {
+            $ringPhpRequest['headers'][$hostKey][0] = $parsedHost['host'];
+        }
 
         // Create a PSR-7 URI from the array passed to the handler
         $uri = (new Uri($ringPhpRequest['uri']))
