@@ -25,13 +25,7 @@ env:
 matrix:
   exclude:
     - php: 5.5
-      env:
-        - ES_PHP_VERSION="^5.4 --prefer-lowest"
-        - ES_PHP_VERSION="^6.1 --prefer-lowest"
-        - ES_PHP_VERSION="^7.0 --prefer-lowest"
-        - ES_PHP_VERSION="^5.4"
-        - ES_PHP_VERSION="^6.1"
-        - ES_PHP_VERSION="^7.0"
+      env: ES_PHP_VERSION="^5.4 --prefer-lowest"
   fast_finish: true
   allow_failures:
     - php: hhvm
