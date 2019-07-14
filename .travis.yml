@@ -14,15 +14,22 @@ sudo: false
 
 env:
   - ES_PHP_VERSION="^2.4 --prefer-lowest"
-  - ES_PHP_VERSION="^5.0 --prefer-lowest"
-  - ES_PHP_VERSION="^6.0 --prefer-lowest"
+  - ES_PHP_VERSION="^5.4 --prefer-lowest"
+  - ES_PHP_VERSION="^6.1 --prefer-lowest"
   - ES_PHP_VERSION="^7.0 --prefer-lowest"
   - ES_PHP_VERSION="^2.4"
-  - ES_PHP_VERSION="^5.0"
-  - ES_PHP_VERSION="^6.0"
+  - ES_PHP_VERSION="^5.4"
+  - ES_PHP_VERSION="^6.1"
   - ES_PHP_VERSION="^7.0"
 
 matrix:
+  exclude:
+    - php: 2.6
+      env: DJANGO_VERSION=1.7.8
+    - python: 2.6
+      env: DJANGO_VERSION=1.8.2
+    - python: 3.4
+      env: DJANGO_VERSION=1.4.20
   fast_finish: true
   allow_failures:
     -   php: hhvm
