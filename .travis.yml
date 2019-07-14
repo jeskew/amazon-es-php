@@ -24,15 +24,17 @@ env:
 
 matrix:
   exclude:
-    - php: 2.6
-      env: DJANGO_VERSION=1.7.8
-    - python: 2.6
-      env: DJANGO_VERSION=1.8.2
-    - python: 3.4
-      env: DJANGO_VERSION=1.4.20
+    - php: 5.5
+      env:
+        - ES_PHP_VERSION="^5.4 --prefer-lowest"
+        - ES_PHP_VERSION="^6.1 --prefer-lowest"
+        - ES_PHP_VERSION="^7.0 --prefer-lowest"
+        - ES_PHP_VERSION="^5.4"
+        - ES_PHP_VERSION="^6.1"
+        - ES_PHP_VERSION="^7.0"
   fast_finish: true
   allow_failures:
-    -   php: hhvm
+    - php: hhvm
 
 install:
   - composer require elasticsearch/elasticsearch:$ES_PHP_VERSION --no-interaction
