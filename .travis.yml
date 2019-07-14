@@ -12,109 +12,22 @@ php:
 
 sudo: false
 
+env:
+  - ES_PHP_VERSION="^2.4 --prefer-lowest"
+  - ES_PHP_VERSION="^5.0 --prefer-lowest"
+  - ES_PHP_VERSION="^6.0 --prefer-lowest"
+  - ES_PHP_VERSION="^7.0 --prefer-lowest"
+  - ES_PHP_VERSION="^2.4"
+  - ES_PHP_VERSION="^5.0"
+  - ES_PHP_VERSION="^6.0"
+  - ES_PHP_VERSION="^7.0"
+
 matrix:
   fast_finish: true
-  include:
-    -   php: 5.5
-        env: ES_PHP_VERSION="^2.4 --prefer-lowest"
-    -   php: 5.5
-        env: ES_PHP_VERSION="^5.0 --prefer-lowest"
-    -   php: 5.5
-        env: ES_PHP_VERSION="^6.0 --prefer-lowest"
-    -   php: 5.5
-        env: ES_PHP_VERSION="^7.0 --prefer-lowest"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^2.4 --prefer-lowest"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^5.0 --prefer-lowest"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^6.0 --prefer-lowest"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^7.0 --prefer-lowest"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^2.4 --prefer-lowest"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^5.0 --prefer-lowest"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^6.0 --prefer-lowest"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^7.0 --prefer-lowest"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^2.4 --prefer-lowest"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^5.0 --prefer-lowest"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^6.0 --prefer-lowest"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^7.0 --prefer-lowest"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^2.4 --prefer-lowest"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^5.0 --prefer-lowest"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^6.0 --prefer-lowest"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^7.0 --prefer-lowest"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^2.4 --prefer-lowest"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^5.0 --prefer-lowest"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^6.0 --prefer-lowest"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^7.0 --prefer-lowest"
-    -   php: 5.5
-        env: ES_PHP_VERSION="^2.4"
-    -   php: 5.5
-        env: ES_PHP_VERSION="^5.0"
-    -   php: 5.5
-        env: ES_PHP_VERSION="^6.0"
-    -   php: 5.5
-        env: ES_PHP_VERSION="^7.0"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^2.4"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^5.0"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^6.0"
-    -   php: 5.6
-        env: ES_PHP_VERSION="^7.0"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^2.4"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^5.0"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^6.0"
-    -   php: 7.0
-        env: ES_PHP_VERSION="^7.0"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^2.4"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^5.0"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^6.0"
-    -   php: 7.1
-        env: ES_PHP_VERSION="^7.0"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^2.4"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^5.0"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^6.0"
-    -   php: 7.2
-        env: ES_PHP_VERSION="^7.0"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^2.4"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^5.0"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^6.0"
-    -   php: 7.3
-        env: ES_PHP_VERSION="^7.0"
   allow_failures:
     -   php: hhvm
 
 install:
-  - composer require elasticsearch/elasticsearch:$COMPOSER_OPTS --no-interaction
+  - composer require elasticsearch/elasticsearch:$ES_PHP_VERSION --no-interaction
 
 script: vendor/bin/phpunit
