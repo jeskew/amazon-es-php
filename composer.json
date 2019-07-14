@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "^5.5|^7.0",
-        "elasticsearch/elasticsearch": "^2.4|^5.0|^6.0|^7.0",
+        "elasticsearch/elasticsearch": "^2.4|^5.4|^6.1|^7.0",
         "aws/aws-sdk-php": "^3.0"
     },
     "require-dev": {
