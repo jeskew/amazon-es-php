@@ -5,8 +5,9 @@ use Aws\Credentials\CredentialProvider;
 use Aws\Credentials\Credentials;
 use Elasticsearch\ClientBuilder;
 use GuzzleHttp\Ring\Future\CompletedFutureArray;
+use PHPUnit\Framework\TestCase;
 
-class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
+class ElasticsearchPhpHandlerTest extends TestCase
 {
     public function testSignsRequestsTheSdkDefaultCredentialProviderChain()
     {
@@ -18,7 +19,7 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
                 "~^AWS4-HMAC-SHA256 Credential=$key/\\d{8}/us-west-2/es/aws4_request~",
                 $ringRequest['headers']['Authorization'][0]
             );
-            
+
             return $this->getGenericResponse();
         };
         putenv(CredentialProvider::ENV_KEY . "=$key");
@@ -26,14 +27,14 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
         $client = $this->getElasticsearchClient(
             new ElasticsearchPhpHandler('us-west-2', null, $toWrap)
         );
-        
+
         $client->get([
             'index' => 'index',
             'type' => 'type',
             'id' => 'id',
         ]);
     }
-    
+
     public function testSignsWithProvidedCredentials()
     {
         $provider = CredentialProvider::fromCredentials(
@@ -43,7 +44,7 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('X-Amz-Security-Token', $ringRequest['headers']);
             $this->assertSame('baz', $ringRequest['headers']['X-Amz-Security-Token'][0]);
             $this->assertRegExp(
-                '~^AWS4-HMAC-SHA256 Credential=foo/\d{8}/us-west-2/es/aws4_request~', 
+                '~^AWS4-HMAC-SHA256 Credential=foo/\d{8}/us-west-2/es/aws4_request~',
                 $ringRequest['headers']['Authorization'][0]
             );
 
@@ -53,7 +54,7 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
         $client = $this->getElasticsearchClient(
             new ElasticsearchPhpHandler('us-west-2', $provider, $toWrap)
         );
-        
+
         $client->get([
             'index' => 'index',
             'type' => 'type',
@@ -107,7 +108,7 @@ class ElasticsearchPhpHandlerTest extends \PHPUnit_Framework_TestCase
 
         return $builder->build();
     }
-    
+
     private function getGenericResponse()
     {
         return new CompletedFutureArray([
