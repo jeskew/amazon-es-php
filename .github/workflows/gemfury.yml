@@ -1,0 +1,17 @@
+on:
+    push:
+        branches:
+            - master
+name: Update Gemfury Package
+jobs:
+    deploy:
+        name: Update Gemfury Package
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+            -   name: Push to Gemfury
+                run: |
+                    git remote add fury https://${{ secrets.GEMFURY_USER }}:${{ secrets.GEMFURY_TOKEN }}@git.fury.io/${{ secrets.GEMFURY_USER }}/${{ secrets.GEMFURY_PACKAGE_NAME }}.git
+                    git push fury ${{ github.ref }}:master

@@ -1,0 +1,22 @@
+name: PHPUnit
+
+on: [pull_request]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v2
+        with:
+          command: config 
+          args: http-basic.packages.rndtech.de ${{ secrets.GEMFURY_DEPLOY_TOKEN }} ""
+          suggest: yes
+          progress: yes
+      - uses: php-actions/composer@v2
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v9
+        with:
+          configuration: phpunit.xml.dist
+          bootstrap: tests/bootstrap.php
