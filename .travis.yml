@@ -6,6 +6,7 @@ php:
   - 7.1
   - 7.2
   - 7.3
+  - 8.1
 
 sudo: false
 
@@ -22,5 +23,6 @@ matrix:
 
 install:
   - travis_retry composer update $COMPOSER_OPTS --no-interaction
+  - travis_retry composer require elasticsearch/elasticsearch $COMPOSER_OPTS
 
 script: vendor/bin/phpunit

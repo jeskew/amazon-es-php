@@ -15,8 +15,7 @@
         "ezimuel/ringphp": "^1.1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8.35|^5.4.0|^6.0.0|^7.0.0|^8.0.0",
-        "elasticsearch/elasticsearch": "^2.1|^5.0|^6.0|^7.0"
+        "phpunit/phpunit": "^4.8.35|^5.4.0|^6.0.0|^7.0.0|^8.0.0"
     },
     "suggest": {
         "elasticsearch/elasticsearch": "Require `elasticsearch/elasticsearch` when using Elasticsearch on AWS",
