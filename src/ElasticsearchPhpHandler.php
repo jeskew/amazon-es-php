@@ -3,10 +3,10 @@ namespace Aws\ElasticsearchService;
 
 use Aws\Credentials\CredentialProvider;
 use Aws\Signature\SignatureV4;
-use Elasticsearch\ClientBuilder;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
+use RuntimeException;
 
 class ElasticsearchPhpHandler
 {
@@ -15,8 +15,8 @@ class ElasticsearchPhpHandler
     private $wrappedHandler;
 
     /**
-     * An AWS Signature V4 signing handler for use with Elasticsearch-PHP and
-     * Amazon Elasticsearch Service.
+     * An AWS Signature V4 signing handler for use with Elasticsearch-PHP or
+     * Opensearch-PHP and Amazon Elasticsearch Service.
      *
      * @param string        $region                 The region of your Amazon
      *                                              Elasticsearch Service domain
@@ -33,7 +33,7 @@ class ElasticsearchPhpHandler
     ) {
         $this->signer = new SignatureV4('es', $region);
         $this->wrappedHandler = $wrappedHandler
-            ?: ClientBuilder::defaultHandler();
+            ?: static::defaultHandler();
         $this->credentialProvider = $credentialProvider
             ?: CredentialProvider::defaultProvider();
     }
@@ -54,7 +54,7 @@ class ElasticsearchPhpHandler
         // https://github.com/aws/aws-sdk-php/issues/1225
         $hostKey = isset($ringPhpRequest['headers']['Host'])? 'Host' : 'host';
 
-        // Amazon ES listens on standard ports (443 for HTTPS, 80 for HTTP).
+        // Amazon ES/OS listens on standard ports (443 for HTTPS, 80 for HTTP).
         // Consequently, the port should be stripped from the host header.
         $parsedUrl = parse_url($ringPhpRequest['headers'][$hostKey][0]);
         if (isset($parsedUrl['host'])) {
@@ -101,5 +101,40 @@ class ElasticsearchPhpHandler
         }
 
         return $ringRequest;
+    }
+
+    /**
+     * Get the default handler closure from either the opensearch-php or the elasticsearch-php library.
+     *
+     * @throws RuntimeException
+     */
+    public static function defaultHandler(array $multiParams = [], array $singleParams = [])
+    {
+        $builderClass = static::clientBuilderClass();
+
+        return $builderClass::defaultHandler($multiParams, $singleParams);
+    }
+
+    /**
+     * Determine the client builder class on the installed search library
+     */
+    protected static function clientBuilderClass()
+    {
+        // Opensearch-PHP
+        if (class_exists('\OpenSearch\ClientBuilder')) {
+            return '\OpenSearch\ClientBuilder';
+        }
+
+        // Elasticsearch-PHP < 8.0
+        if (class_exists('\Elasticsearch\ClientBuilder')) {
+            return '\Elasticsearch\ClientBuilder';
+        }
+
+        // Elasticsearch-PHP >= 8.0
+        if (class_exists('\Elastic\Elasticsearch\ClientBuilder')) {
+            throw new RuntimeException('Elasticsearch-PHP is incompatible from version 8.');
+        }
+
+        throw new RuntimeException('ElasticsearchPhpHandler requires either Elasticsearch-PHP or Opensearch-PHP.');
     }
 }
