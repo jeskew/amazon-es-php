@@ -1,15 +1,18 @@
-# AWS Auth Elasticsearch-PHP / Opensearch-PHP Handler
+# AWS Auth Elasticsearch-PHP
 
 [![Apache 2 License](https://img.shields.io/packagist/l/jsq/amazon-es-php.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0.html)
 [![Total Downloads](https://img.shields.io/packagist/dt/jsq/amazon-es-php.svg?style=flat)](https://packagist.org/packages/jsq/amazon-es-php)
 [![Author](http://img.shields.io/badge/author-@jreskew-blue.svg?style=flat-square)](https://twitter.com/jreskew)
 [![Build Status](https://travis-ci.org/jeskew/amazon-es-php.svg?branch=master)](https://travis-ci.org/jeskew/amazon-es-php)
 
+**NB**: SignatureV4 support is built into the Opensearch-PHP client 
+(`opensearch-project/opensearch-php`) as of [version 2.0.1](https://github.com/opensearch-project/opensearch-php/releases/tag/2.0.1).
+If you are using the Opensearch-PHP client, **you do not need to use this library**.
+
 This package provides a signing handler for use with the official
-Elasticsearch-PHP (`elasticsearch/elasticsearch`) or Opensearch-PHP 
-(`opensearch-project/opensearch-php`) client. By default, the
-handler will load AWS credentials from the environment and send requests using a
-RingPHP cURL handler.
+Elasticsearch-PHP client (`elasticsearch/elasticsearch`). By default, the handler 
+will load AWS credentials from the environment and send requestsusing a RingPHP cURL 
+handler.
 
 The search library package must be installed separately. The documentation below will 
 use Elasticsearch-PHP in the examples, but both libraries should be pretty identical.
